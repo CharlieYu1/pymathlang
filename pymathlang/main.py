@@ -10,12 +10,17 @@ class Element(object):
     tag_name = None
     latex_tag_name = None
 
-    def __init__(self, element):
+    def __init__(self, element, **kwargs):
         self._element = element
+
+        self.attributes = kwargs
 
     def _render_to_mathml(self):
         cls = self.__class__
-        return f"<{cls.tag_name}>{self._element}</{cls.tag_name}>"
+        html_attributes = "".join(
+            [" " + key + "=" + '"' + value + '"' for key, value in self.attributes]
+        )
+        return f"<{cls.tag_name}{html_attributes}>{self._element}</{cls.tag_name}>"
 
     def _render_to_latex(self):
         cls = self.__class__
@@ -45,20 +50,26 @@ class ElementList(object):
     tag_name = None
     latex_tag_name = None
 
-    def __init__(self, elements: Union[List[Element], Element]):
+    def __init__(self, elements: Union[List[Element], Element], **kwargs):
         if isinstance(elements, list):
             self._elements = elements
         else:
             self._elements = [elements]
+        self.attributes = kwargs
 
     def append(self, element: Element):
         self._elements.append(element)
 
-
     def _render_to_mathml(self):
         cls = self.__class__
         rendered_elements = [element._render_to_mathml() for element in self._elements]
-        return f'<{cls.tag_name}>{"".join(rendered_elements)}</{cls.tag_name}>'
+        html_attributes = "".join(
+            [
+                " " + key + "=" + '"' + self.attributes[key] + '"'
+                for key in self.attributes
+            ]
+        )
+        return f"<{cls.tag_name}{html_attributes}>{''.join(rendered_elements)}</{cls.tag_name}>"
 
     def _render_to_latex(self, braces=False):
         cls = self.__class__
@@ -85,14 +96,30 @@ class ElementList(object):
 
 
 class MathEnvironment(ElementList):
-    tag_name = 'math'
+    tag_name = "math"
+
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
+        self.attributes["display"] = "block"
 
     def _render_to_latex(self, braces=False):
-        return '\\(' + super()._render_to_latex(braces) + '\\)'
+        return "\\[" + super()._render_to_latex(braces) + "\\]"
+
+
+class InlineMathEnvironment(ElementList):
+    tag_name = "math"
+
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
+        self.attributes["display"] = "inline"
+
+    def _render_to_latex(self, braces=False):
+        return "\\(" + super()._render_to_latex(braces) + "\\)"
+
 
 class ElementListOfLengthTwo(ElementList):
-    def __init__(self, _elements):
-        super().__init__(_elements)
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
         if len(self._elements) != 2:
             raise Exception("The number of provided elements must be 2")
 
@@ -101,8 +128,8 @@ class ElementListOfLengthTwo(ElementList):
 
 
 class ElementListOfLengthThree(ElementList):
-    def __init__(self, _elements):
-        super().__init__(_elements)
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
         if len(self._elements) != 3:
             raise Exception("The number of provided elements must be 3")
 
@@ -167,3 +194,36 @@ class SubSuperscript(ElementListOfLengthThree):
 class Sqrt(ElementList):
     tag_name = "msqrt"
     latex_tag_name = "sqrt"
+
+
+class Td(ElementList):
+    tag_name = "mtd"
+
+    def _render_to_latex(self):
+        raise NotImplemented
+
+
+class Tr(ElementList):
+    tag_name = "mtr"
+
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
+        for i, element in self._elements:
+            if not isinstance(element, Td):
+                self._elements[i] = Td(element)
+
+    def _render_to_latex(self):
+        raise NotImplemented
+
+
+class Table(ElementList):
+    tag_name = "mtable"
+
+    def __init__(self, _elements, **kwargs):
+        super().__init__(_elements, **kwargs)
+        for i, element in self._elements:
+            if not isinstance(element, Td):
+                self._elements[i] = Td(element)
+
+    def _render_to_latex(self):
+        raise NotImplemented
