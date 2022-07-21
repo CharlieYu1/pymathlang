@@ -1,4 +1,4 @@
-from pymathlang.main import _pad_braces, Row, Identifier, Operator, Number, Fraction
+from pymathlang.main import _pad_braces, Row, Identifier, Operator, Number, Fraction, MathEnvironment
 
 
 def test_pad_braces():
@@ -12,6 +12,15 @@ def test_simple_expression():
         expression._render_to_mathml() == "<mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow>"
     )
     assert expression._render_to_latex() == "x+3"
+
+
+def test_math_environment():
+    expression = MathEnvironment(Row([Identifier("x"), Operator("+"), Number(3)]))
+    assert isinstance(expression._elements[0], Row)
+    assert (
+        expression._render_to_mathml() == "<math><mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow></math>"
+    )
+    assert expression._render_to_latex() == "\(x+3\)"
 
 
 def test_fractions():

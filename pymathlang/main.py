@@ -46,12 +46,14 @@ class ElementList(object):
     latex_tag_name = None
 
     def __init__(self, elements: Union[List[Element], Element]):
-        if isinstance(elements, Element):
-            elements = [elements]
-        self._elements = elements
+        if isinstance(elements, list):
+            self._elements = elements
+        else:
+            self._elements = [elements]
 
     def append(self, element: Element):
         self._elements.append(element)
+
 
     def _render_to_mathml(self):
         cls = self.__class__
@@ -81,6 +83,12 @@ class ElementList(object):
                 )
         return f'{"".join(rendered_elements)}'
 
+
+class MathEnvironment(ElementList):
+    tag_name = 'math'
+
+    def _render_to_latex(self, braces=False):
+        return '\\(' + super()._render_to_latex(braces) + '\\)'
 
 class ElementListOfLengthTwo(ElementList):
     def __init__(self, _elements):
