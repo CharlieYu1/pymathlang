@@ -159,17 +159,3 @@ class SubSuperscript(ElementListOfLengthThree):
 class Sqrt(ElementList):
     tag_name = "msqrt"
     latex_tag_name = "sqrt"
-
-
-e = Identifier("x")
-print(e._render_to_latex())
-
-e = Row([Identifier("x"), Operator("+"), Number(2)])
-print(e._render_to_mathml())
-
-e = Sqrt(Identifier("ab"))
-print(e._render_to_mathml())
-print(e._render_to_latex())
-
-e = Fraction([Identifier("x"), Number(2)])
-print(e._render_to_latex())
