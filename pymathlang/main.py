@@ -207,8 +207,9 @@ class Tr(ElementList):
     tag_name = "mtr"
 
     def __init__(self, _elements, **kwargs):
+        print(_elements)
         super().__init__(_elements, **kwargs)
-        for i, element in self._elements:
+        for i, element in enumerate(self._elements):
             if not isinstance(element, Td):
                 self._elements[i] = Td(element)
 
@@ -221,9 +222,9 @@ class Table(ElementList):
 
     def __init__(self, _elements, **kwargs):
         super().__init__(_elements, **kwargs)
-        for i, element in self._elements:
-            if not isinstance(element, Td):
-                self._elements[i] = Td(element)
+        for i, element in enumerate(self._elements):
+            if not isinstance(element, Tr):
+                self._elements[i] = Tr(element)
 
     def _render_to_latex(self):
         raise NotImplemented
