@@ -6,6 +6,7 @@ from pymathlang.main import (
     Operator,
     Number,
     Fraction,
+    RowWithParentheses,
     MathEnvironment,
     InlineMathEnvironment,
     Table,
@@ -25,6 +26,15 @@ def test_simple_expression():
         expression._render_to_mathml() == "<mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow>"
     )
     assert expression._render_to_latex() == "x+3"
+
+
+def test_parentheses():
+    expression = RowWithParentheses([Identifier("y"), Operator("-"), Number(2)])
+    assert (
+        expression._render_to_mathml()
+        == "<mrow><mo>(</mo><mi>y</mi><mo>-</mo><mn>2</mn><mo>)</mo></mrow>"
+    )
+    assert expression._render_to_latex() == "(y-2)"
 
 
 def test_math_environment():

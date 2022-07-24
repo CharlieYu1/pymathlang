@@ -141,6 +141,14 @@ class Row(ElementList):
     tag_name = "mrow"
 
 
+class RowWithParentheses(ElementList):
+    tag_name = "mrow"
+
+    def __init__(self, elements: Union[List[Element], Element], **kwargs):
+        super().__init__(elements, **kwargs)
+        self._elements = [Operator("(")] + self._elements + [Operator(")")]
+
+
 class Fraction(ElementListOfLengthTwo):
     tag_name = "mfrac"
     latex_tag_name = "frac"
