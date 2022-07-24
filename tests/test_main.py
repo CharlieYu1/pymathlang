@@ -28,6 +28,16 @@ def test_simple_expression():
     assert expression._render_to_latex() == "x+3"
 
 
+def test_equality_of_elements():
+    assert Identifier("a") == Identifier("a")
+
+
+def test_equality_of_element_lists():
+    assert Row([Identifier("x"), Operator("+"), Number(3)]) == Row(
+        [Identifier("x"), Operator("+"), Number(3)]
+    )
+
+
 def test_parentheses():
     expression = RowWithParentheses([Identifier("y"), Operator("-"), Number(2)])
     assert (

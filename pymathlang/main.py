@@ -7,7 +7,7 @@ def _pad_braces(string: str):
 
 
 def _combine_mrows(string: str):
-    return string.replace('</mrow><mrow>', '')
+    return string.replace("</mrow><mrow>", "")
 
 
 class Element(object):
@@ -16,8 +16,12 @@ class Element(object):
 
     def __init__(self, element, **kwargs):
         self._element = element
-
         self.attributes = kwargs
+
+    def __eq__(self, other: "Element"):
+        return (self._element == other._element) and (
+            self.attributes == other.attributes
+        )
 
     def _render_to_mathml(self):
         cls = self.__class__
@@ -60,6 +64,11 @@ class ElementList(object):
         else:
             self._elements = [elements]
         self.attributes = kwargs
+
+    def __eq__(self, other: "ElementList"):
+        return (self._elements == other._elements) and (
+            self.attributes == other.attributes
+        )
 
     def append(self, element: Element):
         self._elements.append(element)
@@ -151,6 +160,14 @@ class RowWithParentheses(ElementList):
     def __init__(self, elements: Union[List[Element], Element], **kwargs):
         super().__init__(elements, **kwargs)
         self._elements = [Operator("(")] + self._elements + [Operator(")")]
+
+
+class RowWithBrackets(ElementList):
+    tag_name = "mrow"
+
+    def __init__(self, elements: Union[List[Element], Element], **kwargs):
+        super().__init__(elements, **kwargs)
+        self._elements = [Operator("[")] + self._elements + [Operator("]")]
 
 
 class Fraction(ElementListOfLengthTwo):
