@@ -175,6 +175,13 @@ class Fraction(ElementListOfLengthTwo):
     latex_tag_name = "frac"
 
 
+class Over(ElementListOfLengthTwo):
+    tag_name = "mover"
+
+    def _render_to_latex(self):
+        raise NotImplemented
+
+
 class Subscript(ElementListOfLengthTwo):
     tag_name = "msub"
 

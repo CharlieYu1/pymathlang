@@ -1,4 +1,3 @@
-from ast import Num
 from pymathlang.main import (
     _pad_braces,
     Row,
@@ -6,6 +5,7 @@ from pymathlang.main import (
     Operator,
     Number,
     Fraction,
+    Over,
     RowWithParentheses,
     MathEnvironment,
     InlineMathEnvironment,
@@ -76,6 +76,14 @@ def test_fractions():
         == "<mfrac><mi>x</mi><mrow><mi>p</mi><mo>-</mo><mi>q</mi></mrow></mfrac>"
     )
     assert expression._render_to_latex() == "\\frac{x}{p-q}"
+
+
+def test_over():
+    vec_AB = Over([Row([Identifier("A"), Identifier("B")]), Operator("\u2192")])
+    assert (
+        vec_AB._render_to_mathml()
+        == "<mover><mrow><mi>A</mi><mi>B</mi></mrow><mo>→</mo></mover>"
+    )
 
 
 def test_table_element():
