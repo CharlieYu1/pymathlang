@@ -79,10 +79,10 @@ def test_fractions():
 
 
 def test_over():
-    vec_AB = Over([Row([Identifier("A"), Identifier("B")]), Operator("\u2192")])
+    vec_AB = Over([Row([Identifier("A"), Identifier("B")]), Operator("&#x2192;")])
     assert (
         vec_AB._render_to_mathml()
-        == "<mover><mrow><mi>A</mi><mi>B</mi></mrow><mo>→</mo></mover>"
+        == "<mover><mrow><mi>A</mi><mi>B</mi></mrow><mo>&#x2192;</mo></mover>"
     )
 
 
