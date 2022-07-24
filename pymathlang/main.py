@@ -6,6 +6,10 @@ def _pad_braces(string: str):
     return "{" + string + "}"
 
 
+def _combine_mrows(string: str):
+    return string.replace('</mrow><mrow>', '')
+
+
 class Element(object):
     tag_name = None
     latex_tag_name = None
