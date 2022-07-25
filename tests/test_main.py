@@ -124,8 +124,8 @@ def test_table_align_at_equal():
         ]
     )
     second_row = Tr([Td(Identifier("x")), Td(Operator("=")), Td(Number(5))])
-    table = Table([first_row, second_row], columnalign="right middle left")
+    table = Table([first_row, second_row], columnalign="right left")
     assert (
         table._render_to_mathml()
-        == '<mtable columnalign="right middle left"><mtr><mtd><mi>x</mi><mo>+</mo><mn>3</mn></mtd><mtd><mo>=</mo></mtd><mtd><mn>8</mn></mtd></mtr><mtr><mtd><mi>x</mi></mtd><mtd><mo>=</mo></mtd><mtd><mn>5</mn></mtd></mtr></mtable>'
+        == '<mtable columnalign="right left"><mtr><mtd><mi>x</mi><mo>+</mo><mn>3</mn></mtd><mtd><mo>=</mo></mtd><mtd><mn>8</mn></mtd></mtr><mtr><mtd><mi>x</mi></mtd><mtd><mo>=</mo></mtd><mtd><mn>5</mn></mtd></mtr></mtable>'
     )
