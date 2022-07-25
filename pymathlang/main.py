@@ -37,6 +37,18 @@ class Element(object):
         return f"{self._element}"
 
 
+class EmptyElement(Element):
+    def __init__(self):
+        self._element = None
+        self.attributes = {}
+
+    def _render_to_mathml(self):
+        return ""
+
+    def _render_to_latex(self):
+        return ""
+
+
 class Identifier(Element):
     tag_name = "mi"
 

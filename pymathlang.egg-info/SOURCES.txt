@@ -1,0 +1,6 @@
+README.md
+setup.py
+pymathlang.egg-info/PKG-INFO
+pymathlang.egg-info/SOURCES.txt
+pymathlang.egg-info/dependency_links.txt
+pymathlang.egg-info/top_level.txt
