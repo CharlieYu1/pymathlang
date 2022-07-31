@@ -26,7 +26,10 @@ class Element(object):
     def _render_to_mathml(self):
         cls = self.__class__
         html_attributes = "".join(
-            [" " + key + "=" + '"' + value + '"' for key, value in self.attributes]
+            [
+                " " + key + "=" + '"' + self.attributes[key] + '"'
+                for key in self.attributes
+            ]
         )
         return f"<{cls.tag_name}{html_attributes}>{self._element}</{cls.tag_name}>"
 

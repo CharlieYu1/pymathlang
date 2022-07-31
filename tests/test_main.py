@@ -28,6 +28,12 @@ def test_simple_expression():
     assert expression._render_to_latex() == "x+3"
 
 
+def test_element_attributes():
+    expression = Number(2, **{"mathsize": "small"})
+    assert expression._render_to_mathml() == '<mn mathsize="small">2</mn>'
+    assert expression._render_to_latex() == "2"
+
+
 def test_equality_of_elements():
     assert Identifier("a") == Identifier("a")
 
